@@ -1,13 +1,18 @@
-const mongoose = require('mongoose');
-const graphql = require('graphql');
-const { GraphQLObjectType, GraphQLList, GraphQLID, GraphQLNonNull } = graphql;
-const SongType = require('./song_type');
-const LyricType = require('./lyric_type');
-const Lyric = mongoose.model('lyric');
-const Song = mongoose.model('song');
+import {
+  GraphQLID,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLObjectType
+} from "graphql";
+import mongoose from "mongoose";
+import { LyricType } from "./lyric_type";
+import { SongType } from "./song_type";
 
-const RootQuery = new GraphQLObjectType({
-  name: 'RootQueryType',
+const Lyric = mongoose.model("lyric");
+const Song = mongoose.model("song");
+
+export const RootQuery = new GraphQLObjectType({
+  name: "RootQueryType",
   fields: () => ({
     songs: {
       type: new GraphQLList(SongType),
@@ -31,5 +36,3 @@ const RootQuery = new GraphQLObjectType({
     }
   })
 });
-
-module.exports = RootQuery;
