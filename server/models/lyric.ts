@@ -19,8 +19,6 @@ const LyricSchema = new Schema<ILyricDocument>({
   content: { type: mongoose.Schema.Types.Number }
 });
 
-const a = 2;
-
 // tslint:disable-next-line:only-arrow-functions
 LyricSchema.statics.like = function(id: string) {
   return this.findById(id).then((lyric: any) => {

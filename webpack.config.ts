@@ -30,5 +30,3 @@ export const webpackConfig: webpack.Configuration = {
     })
   ]
 };
-
-const b = 2;
