@@ -11,7 +11,7 @@
     "dev": "ts-node-dev index.ts --ignore client",
     "lint": "tslint --project tsconfig.json --config tslint.json",
     "lint:fix": "npm run lint -- --fix",
-    "prettier-lint-all": "prettier --write  \"{server,client}/**/*.{js,jsx,ts,tsx}\" && npm run lint:fix"
+    "prettier-lint-all": "prettier --write  \"{server,client}/**/*.{js,jsx,ts,tsx}\" \"*.{js, ts}\" && npm run lint:fix"
   },
   "author": "",
   "license": "ISC",
@@ -45,6 +45,8 @@
     "@types/webpack-dev-middleware": "^2.0.2",
     "css-loader": "^3.0.0",
     "html-webpack-plugin": "^3.2.0",
+    "husky": "^2.4.1",
+    "lint-staged": "^8.2.1",
     "prettier": "^1.18.2",
     "style-loader": "^0.23.1",
     "ts-loader": "^6.0.2",
@@ -54,5 +56,17 @@
     "typescript": "^3.5.2",
     "webpack": "^4.34.0",
     "webpack-dev-middleware": "^3.7.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "tslint --config tslint.json --fix",
+      "git add"
+    ]
   }
 }

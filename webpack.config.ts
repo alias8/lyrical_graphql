@@ -1,5 +1,5 @@
-import HtmlWebpackPlugin  from "html-webpack-plugin"
-import webpack from "webpack"
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import webpack from "webpack";
 
 export const webpackConfig: webpack.Configuration = {
   entry: "./client/index.tsx",
@@ -30,3 +30,5 @@ export const webpackConfig: webpack.Configuration = {
     })
   ]
 };
+
+const b = 2;
