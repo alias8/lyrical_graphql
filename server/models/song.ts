@@ -4,7 +4,7 @@ import { LyricsModel } from "./lyric";
 export interface ISongDocument extends Document {
   title: string;
   user: mongoose.Types.Buffer;
-  lyrics: mongoose.Types.Buffer;
+  lyrics: mongoose.Types.Buffer[];
 }
 
 export interface ISongModel extends Model<ISongDocument> {
@@ -27,9 +27,9 @@ const SongSchema = new Schema<ISongDocument>({
 });
 
 SongSchema.statics.addLyric = function(id: string, content: string) {
-  return this.findById(id).then((existingSong: any) => {
+  return this.findById(id).then((existingSong: ISongDocument) => {
     const newLyric = new LyricsModel({ content, song: existingSong });
-    existingSong.lyrics.push(newLyric);
+    existingSong.lyrics.push(newLyric as any);
     return Promise.all([newLyric.save(), existingSong.save()]).then(
       ([lyric, song]) => song
     );
@@ -39,7 +39,7 @@ SongSchema.statics.addLyric = function(id: string, content: string) {
 SongSchema.statics.findLyrics = function(id: string) {
   return this.findById(id)
     .populate("lyrics")
-    .then((song: any) => song.lyrics);
+    .then((song: ISongDocument) => song.lyrics);
 };
 
 export const SongModel: ISongModel = mongoose.model<ISongDocument, ISongModel>(

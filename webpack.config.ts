@@ -8,6 +8,7 @@ export const webpackConfig: webpack.Configuration = {
     filename: "bundle.js"
   },
   mode: "development",
+  devtool: "inline-source-map",
   module: {
     rules: [
       {

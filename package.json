@@ -16,7 +16,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "apollo-cache-inmemory": "^1.6.2",
     "apollo-client": "^2.6.2",
+    "apollo-link-http": "^1.5.15",
     "axios": "^0.19.0",
     "body-parser": "^1.19.0",
     "connect-mongo": "^2.0.3",
@@ -24,11 +26,13 @@
     "express-graphql": "^0.8.0",
     "express-session": "^1.16.2",
     "graphql": "^14.3.1",
+    "graphql-tag": "^2.10.1",
     "lodash": "^4.17.11",
     "mongoose": "^5.6.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "react": "^16.8.6",
+    "react-apollo": "^2.5.6",
     "react-dom": "^16.8.6"
   },
   "devDependencies": {

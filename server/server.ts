@@ -5,7 +5,6 @@ import mongoose from "mongoose";
 import webpack from "webpack";
 import webpackMiddleware from "webpack-dev-middleware";
 import { webpackConfig } from "../webpack.config";
-// @ts-ignore
 import schema from "./schema/schema";
 
 export const app = express();

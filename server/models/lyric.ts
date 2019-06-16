@@ -2,8 +2,8 @@ import mongoose, { Document, Model, Schema } from "mongoose";
 
 interface ILyricDocument extends Document {
   song: mongoose.Types.Buffer;
-  likes: mongoose.Schema.Types.Number;
-  content: mongoose.Schema.Types.Number;
+  likes: number;
+  content: mongoose.Schema.Types.String;
 }
 
 export interface ILyricsModel extends Model<ILyricDocument> {
@@ -16,12 +16,12 @@ const LyricSchema = new Schema<ILyricDocument>({
     ref: "song"
   },
   likes: { type: mongoose.Schema.Types.Number, default: 0 },
-  content: { type: mongoose.Schema.Types.Number }
+  content: { type: mongoose.Schema.Types.String }
 });
 
 // tslint:disable-next-line:only-arrow-functions
 LyricSchema.statics.like = function(id: string) {
-  return this.findById(id).then((lyric: any) => {
+  return this.findById(id).then((lyric: ILyricDocument) => {
     ++lyric.likes;
     return lyric.save();
   });

@@ -5,15 +5,16 @@ import {
   GraphQLString
 } from "graphql";
 import { LyricsModel } from "../models/lyric";
+import { SongType } from "./song_type";
 
-export const LyricType = new GraphQLObjectType({
+export const LyricType: any = new GraphQLObjectType({
   name: "LyricType",
   fields: () => ({
     id: { type: GraphQLID },
     likes: { type: GraphQLInt },
     content: { type: GraphQLString },
     song: {
-      type: require("./song_type"),
+      type: SongType,
       resolve(parentValue) {
         return LyricsModel.findById(parentValue)
           .populate("song")
