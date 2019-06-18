@@ -4,9 +4,15 @@ import { HttpLink } from "apollo-link-http";
 import React from "react";
 import { ApolloProvider } from "react-apollo";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Link,
+  NavLink,
+  Route,
+  Switch
+} from "react-router-dom";
 import { App } from "./components/App";
-import { SongCreate } from "./components/SongCreate";
+import SongCreate from "./components/SongCreate";
 import SongList from "./components/songList";
 
 const cache = new InMemoryCache();
@@ -20,8 +26,20 @@ class Root extends React.Component {
     return (
       <ApolloProvider client={client}>
         <Router>
-          <Route path={"/"} component={SongList} />
-          <Route path={"/#/song/new"} component={SongCreate} />
+          <nav>
+            <ul>
+              <li>
+                <NavLink to="/">Home</NavLink>
+              </li>
+              <li>
+                <NavLink to="/songs/new">Create Song</NavLink>
+              </li>
+            </ul>
+          </nav>
+          <Switch>
+            <Route exact path={"/"} component={SongList} />
+            <Route exact path={"/songs/new"} component={SongCreate} />
+          </Switch>
         </Router>
       </ApolloProvider>
     );

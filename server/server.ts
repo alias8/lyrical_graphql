@@ -2,6 +2,7 @@ import bodyParser from "body-parser";
 import express from "express";
 import expressGraphQL from "express-graphql";
 import mongoose from "mongoose";
+import * as path from "path";
 import webpack from "webpack";
 import webpackMiddleware from "webpack-dev-middleware";
 import { webpackConfig } from "../webpack.config";
@@ -30,4 +31,4 @@ app.use(
   })
 );
 
-app.use(webpackMiddleware(webpack(webpackConfig)));
+app.use(webpackMiddleware(webpack(webpackConfig), { publicPath: "/" }));
