@@ -1,11 +1,13 @@
 import HtmlWebpackPlugin from "html-webpack-plugin";
+import * as path from "path";
 import webpack from "webpack";
 
 export const webpackConfig: webpack.Configuration = {
   entry: "./client/index.tsx",
   output: {
-    path: undefined,
-    filename: "bundle.js"
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "dist"),
+    publicPath: "/"
   },
   mode: "development",
   devtool: "inline-source-map",

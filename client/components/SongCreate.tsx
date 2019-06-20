@@ -2,8 +2,8 @@ import gql from "graphql-tag";
 import React, { SyntheticEvent } from "react";
 import { graphql } from "react-apollo";
 import { withRouter } from "react-router-dom";
-import { songQuery } from "../queries/fetchSongs";
-
+import { fetchSongs } from "../queries/fetchSongs";
+/* tslint:disable:jsx-no-lambda */
 interface IState {
   title: string;
 }
@@ -16,7 +16,7 @@ class SongCreate extends React.Component<any, IState> {
   public render() {
     return (
       <div>
-        <h3>Create now song</h3>
+        <h3>Create new song</h3>
         <form onSubmit={this.onSubmit}>
           <label>Song Title:</label>
           <input
@@ -35,12 +35,11 @@ class SongCreate extends React.Component<any, IState> {
         variables: {
           title: this.state.title
         },
-        refetchQueries: [{ query: songQuery }]
+        refetchQueries: [{ query: fetchSongs }]
       })
       .then(() => {
         this.props.history.push("/");
       });
-    console.log(this.props);
   };
 }
 

@@ -31,4 +31,8 @@ app.use(
   })
 );
 
-app.use(webpackMiddleware(webpack(webpackConfig), { publicPath: "/" }));
+app.use(
+  webpackMiddleware(webpack(webpackConfig), {
+    publicPath: webpackConfig.output!.publicPath as string
+  })
+);

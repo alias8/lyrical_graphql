@@ -6,14 +6,15 @@ import { ApolloProvider } from "react-apollo";
 import ReactDOM from "react-dom";
 import {
   BrowserRouter as Router,
-  Link,
   NavLink,
   Route,
   Switch
 } from "react-router-dom";
-import { App } from "./components/App";
+import { NoMatch } from "./components/NoMatch";
 import SongCreate from "./components/SongCreate";
-import SongList from "./components/songList";
+import SongDetail, { Test } from "./components/SongDetail";
+import SongList from "./components/SongList";
+import "./style/style.css";
 
 const cache = new InMemoryCache();
 const client = new ApolloClient({
@@ -37,8 +38,10 @@ class Root extends React.Component {
             </ul>
           </nav>
           <Switch>
-            <Route exact path={"/"} component={SongList} />
-            <Route exact path={"/songs/new"} component={SongCreate} />
+            <Route exact={true} path={"/"} component={SongList} />
+            <Route exact={true} path={"/songs/new"} component={SongCreate} />
+            <Route exact={true} path={"/songs/:id"} component={SongDetail} />
+            <Route component={NoMatch} />
           </Switch>
         </Router>
       </ApolloProvider>
