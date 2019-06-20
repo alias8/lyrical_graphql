@@ -40,6 +40,10 @@ class LyricCreate extends React.Component<IProps, IState> {
         songId: this.props.songId
       }
     });
+
+    this.setState({
+      content: ""
+    });
   };
 }
 

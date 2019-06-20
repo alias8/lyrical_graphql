@@ -3,6 +3,7 @@ import { graphql } from "react-apollo";
 import { Link, RouteComponentProps } from "react-router-dom";
 import { fetchSong } from "../queries/fetchSong";
 import LyricCreate from "./LyricCreate";
+import LyricList from "./LyricList";
 
 interface IProps extends RouteComponentProps<{ id: string }> {
   something?: string;
@@ -20,6 +21,7 @@ class SongDetail extends React.Component<IProps> {
       <div>
         <Link to={"/"}>Back</Link>
         <h3>{song.title}</h3>
+        <LyricList />
         <LyricCreate songId={this.props.match.params.id} />
       </div>
     );
