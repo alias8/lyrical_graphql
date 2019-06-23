@@ -1,14 +1,20 @@
 import gql from "graphql-tag";
 import React from "react";
-import { graphql } from "react-apollo";
+import { ChildDataProps, ChildMutateProps, graphql } from "react-apollo";
+import { fetchSongs } from "../queries/fetchSongs";
+import { ISong } from "../types";
 
 interface IState {
   content: string;
 }
 
-interface IProps {
+interface IOwnProps {
   songId: string;
 }
+
+type ChildProps = ChildDataProps<IOwnProps, {}, {}> & ChildMutateProps;
+
+type IProps = ChildProps;
 
 class LyricCreate extends React.Component<IProps, IState> {
   public state = {
@@ -34,7 +40,7 @@ class LyricCreate extends React.Component<IProps, IState> {
 
   private onSubmit = event => {
     event.preventDefault();
-    (this.props as any).mutate({
+    this.props.mutate({
       variables: {
         content: this.state.content,
         songId: this.props.songId
@@ -59,5 +65,4 @@ const mutation = gql`
   }
 `;
 
-// @ts-ignore
-export default graphql(mutation)(LyricCreate);
+export default graphql<{}, {}, {}, ChildProps>(mutation)(LyricCreate);

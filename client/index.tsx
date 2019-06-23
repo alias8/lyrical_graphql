@@ -12,7 +12,7 @@ import {
 } from "react-router-dom";
 import { NoMatch } from "./components/NoMatch";
 import SongCreate from "./components/SongCreate";
-import SongDetail, { Test } from "./components/SongDetail";
+import SongDetail from "./components/SongDetail";
 import SongList from "./components/SongList";
 import "./style/style.css";
 
