@@ -1,14 +1,35 @@
+import gql from "graphql-tag";
 import React from "react";
-import { graphql } from "react-apollo";
+import { ChildDataProps, graphql, Query } from "react-apollo";
 import { Link, RouteComponentProps } from "react-router-dom";
-import { fetchSong } from "../queries/fetchSong";
+import { ISong } from "../types";
 import LyricCreate from "./LyricCreate";
 import LyricList from "./LyricList";
 
-interface IProps extends RouteComponentProps<{ id: string }> {
-  something?: string;
-  data: any;
+const FETCH_SONG_QUERY = gql`
+  query SongQuery($id: ID!) {
+    song(id: $id) {
+      id
+      title
+    }
+  }
+`;
+
+interface Response {
+  song: ISong;
 }
+
+interface Variables {
+  id: string;
+}
+
+type ChildProps = ChildDataProps<{}, Response, Variables>;
+
+interface IOwnProps extends RouteComponentProps<{ id: string }> {
+  something?: string;
+}
+
+type IProps = IOwnProps & ChildProps;
 
 class SongDetail extends React.Component<IProps> {
   public render() {
@@ -28,20 +49,17 @@ class SongDetail extends React.Component<IProps> {
   }
 }
 
-export const Test = () => {
-  return <div>test123</div>;
-};
-
-/*
- * use this method when you need to query something using the url
- * i.e. before the component renders
- * */
-export default graphql<IProps, { song: string }>(fetchSong, {
-  options: props => {
-    return {
-      variables: {
-        id: props.match.params.id
-      }
-    };
+const withSong = graphql<IOwnProps, Response, Variables, ChildProps>(
+  FETCH_SONG_QUERY,
+  {
+    options: props => {
+      return {
+        variables: {
+          id: props.match.params.id
+        }
+      };
+    }
   }
-})(SongDetail);
+);
+
+export default withSong(SongDetail);

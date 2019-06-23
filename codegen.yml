@@ -1,11 +1,11 @@
 overwrite: true
 schema: "server/models/schema.graphql"
-documents: "server/schema/schema.ts"
+#documents: "client/**/*.{ts,tsx}"
 generates:
   server/generated/types.ts:
     plugins:
       - "typescript"
-#      - "typescript-operations"
+      - "typescript-operations"
 #      - "typescript-react-apollo"
 #  ./graphql.schema.json:
 #    plugins:
