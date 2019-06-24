@@ -10,10 +10,6 @@ import {
   Route,
   Switch
 } from "react-router-dom";
-import { NoMatch } from "./components/NoMatch";
-import SongCreate from "./components/SongCreate";
-import SongDetail from "./components/SongDetail";
-import SongList from "./components/SongList";
 import "./style/style.css";
 
 const cache = new InMemoryCache();
@@ -26,24 +22,7 @@ class Root extends React.Component {
   public render() {
     return (
       <ApolloProvider client={client}>
-        <Router>
-          <nav>
-            <ul>
-              <li>
-                <NavLink to="/">Home</NavLink>
-              </li>
-              <li>
-                <NavLink to="/songs/new">Create Song</NavLink>
-              </li>
-            </ul>
-          </nav>
-          <Switch>
-            <Route exact={true} path={"/"} component={SongList} />
-            <Route exact={true} path={"/songs/new"} component={SongCreate} />
-            <Route exact={true} path={"/songs/:id"} component={SongDetail} />
-            <Route component={NoMatch} />
-          </Switch>
-        </Router>
+        <div>song list</div>
       </ApolloProvider>
     );
   }
