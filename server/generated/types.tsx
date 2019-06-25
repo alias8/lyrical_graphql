@@ -1,3 +1,4 @@
+/* tslint-disable */
 import gql from "graphql-tag";
 import * as React from "react";
 import * as ReactApollo from "react-apollo";
@@ -99,6 +100,7 @@ export type GetSongsProps<TChildProps = {}> = Partial<
   ReactApollo.DataProps<GetSongsQuery, GetSongsQueryVariables>
 > &
   TChildProps;
+
 export function withGetSongs<TProps, TChildProps = {}>(
   operationOptions?: ReactApollo.OperationOption<
     TProps,

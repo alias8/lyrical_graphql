@@ -4,9 +4,11 @@ documents: "client/gqlOperations/*.ts"
 generates:
   server/generated/types.tsx:
     plugins:
+      - add: '/* tslint-disable */'
       - "typescript"
       - "typescript-operations"
       - "typescript-react-apollo"
-#  ./graphql.schema.json:
-#    plugins:
-#      - "introspection"
+    config:
+      withHOC: true
+      withHooks: false
+      withComponent: true

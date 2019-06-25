@@ -10,6 +10,7 @@ import {
   Route,
   Switch
 } from "react-router-dom";
+
 import "./style/style.css";
 
 const cache = new InMemoryCache();
@@ -22,7 +23,7 @@ class Root extends React.Component {
   public render() {
     return (
       <ApolloProvider client={client}>
-        <div>song list</div>
+        <div>dasda</div>
       </ApolloProvider>
     );
   }
