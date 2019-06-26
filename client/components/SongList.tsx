@@ -58,9 +58,13 @@ class SongList extends React.Component<IProps> {
   }
 
   private onSongDelete = id => {
-    this.props.mutate!({ variables: { id } }).then(() =>
-      this.props.data!.refetch()
-    );
+    this.props.mutate!({ variables: { id } }).then(() => {
+      /*
+       * We can use refetch() here because we want to call the getSongs
+       * query again, and this component knows what that is.
+       * */
+      return this.props.data!.refetch();
+    });
   };
 }
 

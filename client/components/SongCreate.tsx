@@ -41,6 +41,10 @@ class SongCreate extends React.Component<IProps, IState> {
       variables: {
         title
       },
+      /*
+       * We can't use refetch() here because we want to call the getSongs
+       * query again, and this component does not know what that is.
+       * */
       refetchQueries: [{ query: getSongs }]
     }).then(() => {
       this.props.history.push("/");
