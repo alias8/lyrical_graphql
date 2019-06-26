@@ -11,6 +11,9 @@ import {
   Switch
 } from "react-router-dom";
 
+import Default from "./components/Default";
+import NoMatch from "./components/NoMatch";
+import SongCreate from "./components/SongCreate";
 import SongList from "./components/SongList";
 import "./style/style.css";
 
@@ -24,7 +27,26 @@ class Root extends React.Component {
   public render() {
     return (
       <ApolloProvider client={client}>
-        <SongList something={"hello"} />
+        <Router>
+          <nav>
+            <ul>
+              <li>
+                <NavLink to="/">Home</NavLink>
+              </li>
+              <li>
+                <NavLink to="/songs/new">Create Song</NavLink>
+              </li>
+            </ul>
+          </nav>
+          <Default>
+            <Switch>
+              <Route exact={true} path={"/"} component={SongList} />
+              <Route exact={true} path={"/songs/new"} component={SongCreate} />
+              {/*<Route exact={true} path={"/songs/:id"} component={SongDetail} />*/}
+              <Route component={NoMatch} />
+            </Switch>
+          </Default>
+        </Router>
       </ApolloProvider>
     );
   }
