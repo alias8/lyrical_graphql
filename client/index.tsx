@@ -11,6 +11,7 @@ import {
   Switch
 } from "react-router-dom";
 
+import SongList from "./components/SongList";
 import "./style/style.css";
 
 const cache = new InMemoryCache();
@@ -23,7 +24,7 @@ class Root extends React.Component {
   public render() {
     return (
       <ApolloProvider client={client}>
-        <div>dasda</div>
+        <SongList something={"hello"} />
       </ApolloProvider>
     );
   }
