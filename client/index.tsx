@@ -14,6 +14,7 @@ import {
 import Default from "./components/Default";
 import NoMatch from "./components/NoMatch";
 import SongCreate from "./components/SongCreate";
+import SongDetail from "./components/SongDetail";
 import SongList from "./components/SongList";
 import "./style/style.css";
 
@@ -42,7 +43,7 @@ class Root extends React.Component {
             <Switch>
               <Route exact={true} path={"/"} component={SongList} />
               <Route exact={true} path={"/songs/new"} component={SongCreate} />
-              {/*<Route exact={true} path={"/songs/:id"} component={SongDetail} />*/}
+              <Route exact={true} path={"/songs/:id"} component={SongDetail} />
               <Route component={NoMatch} />
             </Switch>
           </Default>
