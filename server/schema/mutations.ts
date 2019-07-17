@@ -12,6 +12,7 @@ export const mutations = new GraphQLObjectType({
       args: {
         title: { type: GraphQLString }
       },
+      // @ts-ignore
       resolve(parentValue, { title }) {
         return new SongModel({ title }).save();
       }
@@ -22,6 +23,7 @@ export const mutations = new GraphQLObjectType({
         content: { type: GraphQLString },
         songId: { type: GraphQLID }
       },
+      // @ts-ignore
       resolve(parentValue, { content, songId }) {
         return SongModel.addLyric(songId, content);
       }
@@ -29,6 +31,7 @@ export const mutations = new GraphQLObjectType({
     likeLyric: {
       type: LyricType,
       args: { id: { type: GraphQLID } },
+      // @ts-ignore
       resolve(parentValue, { id }) {
         return LyricsModel.like(id);
       }
@@ -36,6 +39,7 @@ export const mutations = new GraphQLObjectType({
     deleteSong: {
       type: SongType,
       args: { id: { type: GraphQLID } },
+      // @ts-ignore
       resolve(parentValue, { id }) {
         return SongModel.remove({ _id: id });
       }

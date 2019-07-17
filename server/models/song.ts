@@ -21,7 +21,7 @@ const SongSchema = new Schema<ISongDocument>({
   lyrics: [
     {
       type: Schema.Types.ObjectId,
-      ref: "lyric"
+      ref: "lyrics"
     }
   ]
 });
@@ -31,7 +31,8 @@ SongSchema.statics.addLyric = function(id: string, content: string) {
     const newLyric = new LyricsModel({ content, song: existingSong });
     existingSong.lyrics.push(newLyric as any);
     return Promise.all([newLyric.save(), existingSong.save()]).then(
-      ([lyric, song]) => song
+      // @ts-ignore
+      ([lyrics, song]) => song
     );
   });
 };

@@ -21,6 +21,7 @@ export const RootQuery = new GraphQLObjectType({
     song: {
       type: SongType,
       args: { id: { type: new GraphQLNonNull(GraphQLID) } },
+      // @ts-ignore
       resolve(parentValue, { id }) {
         return SongModel.findById(id);
       }
@@ -28,6 +29,7 @@ export const RootQuery = new GraphQLObjectType({
     lyric: {
       type: LyricType,
       args: { id: { type: new GraphQLNonNull(GraphQLID) } },
+      // @ts-ignore
       resolve(parentValue, { id }) {
         return LyricsModel.findById(id);
       }

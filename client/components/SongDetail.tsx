@@ -1,22 +1,34 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, RouteComponentProps } from "react-router-dom";
+import { GetSongProps, withGetSong } from "../../server/generated/types";
 import LyricCreate from "./LyricCreate";
+import LyricList from "./LyricList";
 
-class SongDetail extends React.Component {
+type IProps = RouteComponentProps<{ id: string }> & GetSongProps;
+
+class SongDetail extends React.Component<IProps> {
   public render() {
-    // const { song } = this.props.data;
-    // if (!song) {
-    //   return <div>loading...</div>;
-    // }
-
     return (
       <div>
         <Link to={"/"}>Back</Link>
-        {/*<h3>{song.title}</h3>*/}
-        {/*<LyricCreate songId={this.props.match.params.id} />*/}
+        {this.props.data && this.props.data.song ? (
+          <div>
+            <h3>{this.props.data.song.title}</h3>
+            <LyricList />
+            <LyricCreate songId={this.props.match.params.id} />
+          </div>
+        ) : (
+          <div>Loading...</div>
+        )}
       </div>
     );
   }
 }
 
-export default SongDetail;
+export default withGetSong<IProps>({
+  options: props => ({
+    variables: {
+      id: props.match.params.id
+    }
+  })
+})(SongDetail);

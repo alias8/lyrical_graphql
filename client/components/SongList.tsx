@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, RouteComponentProps } from "react-router-dom";
 import {
   DeleteSongProps,
   GetSongsProps,
@@ -28,11 +28,7 @@ const Item = ({ id, title, onSongDelete }: IPropsItem) => {
   );
 };
 
-interface IOwnProps {
-  something: string;
-}
-
-type IProps = IOwnProps & GetSongsProps & DeleteSongProps;
+type IProps = RouteComponentProps & GetSongsProps & DeleteSongProps;
 
 class SongList extends React.Component<IProps> {
   public render() {

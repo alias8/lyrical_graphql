@@ -30,4 +30,4 @@ LyricSchema.statics.like = function(id: string) {
 export const LyricsModel: ILyricsModel = mongoose.model<
   ILyricDocument,
   ILyricsModel
->("lyric", LyricSchema);
+>("lyrics", LyricSchema);

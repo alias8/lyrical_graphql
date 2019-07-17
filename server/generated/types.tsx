@@ -1,95 +1,120 @@
 /* tslint:disable */
 import gql from "graphql-tag";
-import * as React from "react";
 import * as ReactApollo from "react-apollo";
+import * as React from "react";
 export type Maybe<T> = T | null;
 export type MaybePromise<T> = Promise<T> | T;
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
-export interface Scalars {
+export type Scalars = {
   ID: string;
   String: string;
   Boolean: boolean;
   Int: number;
   Float: number;
-}
+};
 
-export interface LyricType {
+export type LyricType = {
   __typename?: "LyricType";
   id?: Maybe<Scalars["ID"]>;
   likes?: Maybe<Scalars["Int"]>;
   content?: Maybe<Scalars["String"]>;
   song?: Maybe<SongType>;
-}
+};
 
-export interface Mutation {
+export type Mutation = {
   __typename?: "Mutation";
   addSong?: Maybe<SongType>;
   addLyricToSong?: Maybe<SongType>;
   likeLyric?: Maybe<LyricType>;
   deleteSong?: Maybe<SongType>;
-}
+};
 
-export interface MutationAddSongArgs {
+export type MutationAddSongArgs = {
   title?: Maybe<Scalars["String"]>;
-}
+};
 
-export interface MutationAddLyricToSongArgs {
+export type MutationAddLyricToSongArgs = {
   content?: Maybe<Scalars["String"]>;
   songId?: Maybe<Scalars["ID"]>;
-}
+};
 
-export interface MutationLikeLyricArgs {
+export type MutationLikeLyricArgs = {
   id?: Maybe<Scalars["ID"]>;
-}
+};
 
-export interface MutationDeleteSongArgs {
+export type MutationDeleteSongArgs = {
   id?: Maybe<Scalars["ID"]>;
-}
+};
 
-export interface RootQueryType {
+export type RootQueryType = {
   __typename?: "RootQueryType";
   songs?: Maybe<Array<Maybe<SongType>>>;
   song?: Maybe<SongType>;
   lyric?: Maybe<LyricType>;
-}
+};
 
-export interface RootQueryTypeSongArgs {
+export type RootQueryTypeSongArgs = {
   id: Scalars["ID"];
-}
+};
 
-export interface RootQueryTypeLyricArgs {
+export type RootQueryTypeLyricArgs = {
   id: Scalars["ID"];
-}
+};
 
-export interface SongType {
+export type SongType = {
   __typename?: "SongType";
   id?: Maybe<Scalars["ID"]>;
   title?: Maybe<Scalars["String"]>;
   lyrics?: Maybe<Array<Maybe<LyricType>>>;
-}
-export interface AddSongMutationVariables {
+};
+export type AddSongMutationVariables = {
   title?: Maybe<Scalars["String"]>;
-}
+};
 
 export type AddSongMutation = { __typename?: "Mutation" } & {
   addSong: Maybe<{ __typename?: "SongType" } & Pick<SongType, "title">>;
 };
 
-export interface DeleteSongMutationVariables {
+export type DeleteSongMutationVariables = {
   id?: Maybe<Scalars["ID"]>;
-}
+};
 
 export type DeleteSongMutation = { __typename?: "Mutation" } & {
   deleteSong: Maybe<{ __typename?: "SongType" } & Pick<SongType, "id">>;
 };
 
-export interface GetSongsQueryVariables {}
+export type AddLyricToSongMutationVariables = {
+  content?: Maybe<Scalars["String"]>;
+  songId?: Maybe<Scalars["ID"]>;
+};
+
+export type AddLyricToSongMutation = { __typename?: "Mutation" } & {
+  addLyricToSong: Maybe<
+    { __typename?: "SongType" } & Pick<SongType, "id" | "title"> & {
+        lyrics: Maybe<
+          Array<
+            Maybe<{ __typename?: "LyricType" } & Pick<LyricType, "content">>
+          >
+        >;
+      }
+  >;
+};
+
+export type GetSongsQueryVariables = {};
 
 export type GetSongsQuery = { __typename?: "RootQueryType" } & {
   songs: Maybe<
     Array<Maybe<{ __typename?: "SongType" } & Pick<SongType, "id" | "title">>>
   >;
+};
+
+export type GetSongQueryVariables = {
+  id: Scalars["ID"];
+};
+
+export type GetSongQuery = { __typename?: "RootQueryType" } & {
+  song: Maybe<{ __typename?: "SongType" } & Pick<SongType, "id" | "title">>;
 };
 
 export const AddSongDocument = gql`
@@ -119,7 +144,7 @@ export type AddSongProps<TChildProps = {}> = Partial<
   ReactApollo.MutateProps<AddSongMutation, AddSongMutationVariables>
 > &
   TChildProps;
-export function withAddSong<TProps, TChildProps = {}>(
+export function withAddSong<TProps, TChildProps = {}>( // here1
   operationOptions?: ReactApollo.OperationOption<
     TProps,
     AddSongMutation,
@@ -182,6 +207,63 @@ export function withDeleteSong<TProps, TChildProps = {}>(
     ...operationOptions
   });
 }
+export const AddLyricToSongDocument = gql`
+  mutation AddLyricToSong($content: String, $songId: ID) {
+    addLyricToSong(content: $content, songId: $songId) {
+      id
+      title
+      lyrics {
+        content
+      }
+    }
+  }
+`;
+export type AddLyricToSongMutationFn = ReactApollo.MutationFn<
+  AddLyricToSongMutation,
+  AddLyricToSongMutationVariables
+>;
+export type AddLyricToSongComponentProps = Omit<
+  ReactApollo.MutationProps<
+    AddLyricToSongMutation,
+    AddLyricToSongMutationVariables
+  >,
+  "mutation"
+>;
+
+export const AddLyricToSongComponent = (
+  props: AddLyricToSongComponentProps
+) => (
+  <ReactApollo.Mutation<AddLyricToSongMutation, AddLyricToSongMutationVariables>
+    mutation={AddLyricToSongDocument}
+    {...props}
+  />
+);
+
+export type AddLyricToSongProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<
+    AddLyricToSongMutation,
+    AddLyricToSongMutationVariables
+  >
+> &
+  TChildProps;
+export function withAddLyricToSong<TProps, TChildProps = {}>( // here2
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    AddLyricToSongMutation,
+    AddLyricToSongMutationVariables,
+    AddLyricToSongProps<TChildProps>
+  >
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    AddLyricToSongMutation,
+    AddLyricToSongMutationVariables,
+    AddLyricToSongProps<TChildProps>
+  >(AddLyricToSongDocument, {
+    alias: "withAddLyricToSong",
+    ...operationOptions
+  });
+}
 export const GetSongsDocument = gql`
   query getSongs {
     songs {
@@ -221,6 +303,49 @@ export function withGetSongs<TProps, TChildProps = {}>(
     GetSongsProps<TChildProps>
   >(GetSongsDocument, {
     alias: "withGetSongs",
+    ...operationOptions
+  });
+}
+export const GetSongDocument = gql`
+  query getSong($id: ID!) {
+    song(id: $id) {
+      id
+      title
+    }
+  }
+`;
+export type GetSongComponentProps = Omit<
+  ReactApollo.QueryProps<GetSongQuery, GetSongQueryVariables>,
+  "query"
+> &
+  ({ variables: GetSongQueryVariables; skip?: false } | { skip: true });
+
+export const GetSongComponent = (props: GetSongComponentProps) => (
+  <ReactApollo.Query<GetSongQuery, GetSongQueryVariables>
+    query={GetSongDocument}
+    {...props}
+  />
+);
+
+export type GetSongProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<GetSongQuery, GetSongQueryVariables>
+> &
+  TChildProps;
+export function withGetSong<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    GetSongQuery,
+    GetSongQueryVariables,
+    GetSongProps<TChildProps>
+  >
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    GetSongQuery,
+    GetSongQueryVariables,
+    GetSongProps<TChildProps>
+  >(GetSongDocument, {
+    alias: "withGetSong",
     ...operationOptions
   });
 }

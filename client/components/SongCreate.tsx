@@ -7,11 +7,7 @@ interface IState {
   title: string;
 }
 
-interface IOwnProps {
-  something1: string;
-}
-
-type IProps = IOwnProps & AddSongProps & RouteComponentProps;
+type IProps = AddSongProps & RouteComponentProps;
 
 class SongCreate extends React.Component<IProps, IState> {
   public state = {
