@@ -94,10 +94,25 @@ export type AddLyricToSongMutation = { __typename?: "Mutation" } & {
     { __typename?: "SongType" } & Pick<SongType, "id" | "title"> & {
         lyrics: Maybe<
           Array<
-            Maybe<{ __typename?: "LyricType" } & Pick<LyricType, "content">>
+            Maybe<
+              { __typename?: "LyricType" } & Pick<
+                LyricType,
+                "id" | "content" | "likes"
+              >
+            >
           >
         >;
       }
+  >;
+};
+
+export type LikeLyricMutationVariables = {
+  id?: Maybe<Scalars["ID"]>;
+};
+
+export type LikeLyricMutation = { __typename?: "Mutation" } & {
+  likeLyric: Maybe<
+    { __typename?: "LyricType" } & Pick<LyricType, "id" | "likes">
   >;
 };
 
@@ -114,7 +129,20 @@ export type GetSongQueryVariables = {
 };
 
 export type GetSongQuery = { __typename?: "RootQueryType" } & {
-  song: Maybe<{ __typename?: "SongType" } & Pick<SongType, "id" | "title">>;
+  song: Maybe<
+    { __typename?: "SongType" } & Pick<SongType, "id" | "title"> & {
+        lyrics: Maybe<
+          Array<
+            Maybe<
+              { __typename?: "LyricType" } & Pick<
+                LyricType,
+                "id" | "content" | "likes"
+              >
+            >
+          >
+        >;
+      }
+  >;
 };
 
 export const AddSongDocument = gql`
@@ -144,7 +172,7 @@ export type AddSongProps<TChildProps = {}> = Partial<
   ReactApollo.MutateProps<AddSongMutation, AddSongMutationVariables>
 > &
   TChildProps;
-export function withAddSong<TProps, TChildProps = {}>( // here1
+export function withAddSong<TProps, TChildProps = {}>(
   operationOptions?: ReactApollo.OperationOption<
     TProps,
     AddSongMutation,
@@ -213,7 +241,9 @@ export const AddLyricToSongDocument = gql`
       id
       title
       lyrics {
+        id
         content
+        likes
       }
     }
   }
@@ -246,7 +276,7 @@ export type AddLyricToSongProps<TChildProps = {}> = Partial<
   >
 > &
   TChildProps;
-export function withAddLyricToSong<TProps, TChildProps = {}>( // here2
+export function withAddLyricToSong<TProps, TChildProps = {}>(
   operationOptions?: ReactApollo.OperationOption<
     TProps,
     AddLyricToSongMutation,
@@ -261,6 +291,52 @@ export function withAddLyricToSong<TProps, TChildProps = {}>( // here2
     AddLyricToSongProps<TChildProps>
   >(AddLyricToSongDocument, {
     alias: "withAddLyricToSong",
+    ...operationOptions
+  });
+}
+export const LikeLyricDocument = gql`
+  mutation LikeLyric($id: ID) {
+    likeLyric(id: $id) {
+      id
+      likes
+    }
+  }
+`;
+export type LikeLyricMutationFn = ReactApollo.MutationFn<
+  LikeLyricMutation,
+  LikeLyricMutationVariables
+>;
+export type LikeLyricComponentProps = Omit<
+  ReactApollo.MutationProps<LikeLyricMutation, LikeLyricMutationVariables>,
+  "mutation"
+>;
+
+export const LikeLyricComponent = (props: LikeLyricComponentProps) => (
+  <ReactApollo.Mutation<LikeLyricMutation, LikeLyricMutationVariables>
+    mutation={LikeLyricDocument}
+    {...props}
+  />
+);
+
+export type LikeLyricProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<LikeLyricMutation, LikeLyricMutationVariables>
+> &
+  TChildProps;
+export function withLikeLyric<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    LikeLyricMutation,
+    LikeLyricMutationVariables,
+    LikeLyricProps<TChildProps>
+  >
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    LikeLyricMutation,
+    LikeLyricMutationVariables,
+    LikeLyricProps<TChildProps>
+  >(LikeLyricDocument, {
+    alias: "withLikeLyric",
     ...operationOptions
   });
 }
@@ -311,6 +387,11 @@ export const GetSongDocument = gql`
     song(id: $id) {
       id
       title
+      lyrics {
+        id
+        content
+        likes
+      }
     }
   }
 `;

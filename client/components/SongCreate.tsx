@@ -1,7 +1,6 @@
 import React, { SyntheticEvent } from "react";
 import { RouteComponentProps } from "react-router";
 import { AddSongProps, withAddSong } from "../../server/generated/types";
-import { getSongs } from "../gqlOperations/queries";
 
 interface IState {
   title: string;
@@ -36,12 +35,7 @@ class SongCreate extends React.Component<IProps, IState> {
     this.props.mutate!({
       variables: {
         title
-      },
-      /*
-       * We can't use refetch() here because we want to call the getSongs
-       * query again, and this component does not know what that is.
-       * */
-      refetchQueries: [{ query: getSongs }]
+      }
     }).then(() => {
       this.props.history.push("/");
     });

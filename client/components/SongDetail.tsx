@@ -14,7 +14,9 @@ class SongDetail extends React.Component<IProps> {
         {this.props.data && this.props.data.song ? (
           <div>
             <h3>{this.props.data.song.title}</h3>
-            <LyricList />
+            {this.props.data.song.lyrics && (
+              <LyricList lyrics={this.props.data.song.lyrics} />
+            )}
             <LyricCreate songId={this.props.match.params.id} />
           </div>
         ) : (

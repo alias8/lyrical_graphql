@@ -18,7 +18,9 @@ import SongDetail from "./components/SongDetail";
 import SongList from "./components/SongList";
 import "./style/style.css";
 
-const cache = new InMemoryCache();
+const cache = new InMemoryCache({
+  dataIdFromObject: o => o.id
+});
 const client = new ApolloClient({
   link: new HttpLink(),
   cache
