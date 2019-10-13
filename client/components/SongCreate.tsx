@@ -1,12 +1,17 @@
 import React, { SyntheticEvent } from "react";
 import { RouteComponentProps } from "react-router";
-import { AddSongProps, withAddSong } from "../../server/generated/types";
+import {
+  AddSongProps,
+  GetSongsProps,
+  withAddSong,
+  withGetSongs
+} from "../../server/generated/types";
 
 interface IState {
   title: string;
 }
 
-type IProps = AddSongProps & RouteComponentProps;
+type IProps = AddSongProps & GetSongsProps & RouteComponentProps;
 
 class SongCreate extends React.Component<IProps, IState> {
   public state = {
@@ -36,10 +41,18 @@ class SongCreate extends React.Component<IProps, IState> {
       variables: {
         title
       }
-    }).then(() => {
-      this.props.history.push("/");
-    });
+    })
+      .then(() => {
+        /*
+         * we need to tell apollo that we've added something to the songs list
+         * and to refetch the whole list.
+         * */
+        return this.props.data!.refetch();
+      })
+      .then(() => {
+        this.props.history.push("/");
+      });
   };
 }
 
-export default withAddSong<IProps>()(SongCreate);
+export default withGetSongs<IProps>()(withAddSong<IProps>()(SongCreate));
