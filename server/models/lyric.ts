@@ -1,5 +1,4 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-import { profanityFilter } from "./song";
 
 interface ILyricDocument extends Document {
   song: mongoose.Types.Buffer;
@@ -17,17 +16,7 @@ const LyricSchema = new Schema<ILyricDocument>({
     ref: "song"
   },
   likes: { type: mongoose.Schema.Types.Number, default: 0 },
-  content: {
-    type: mongoose.Schema.Types.String,
-    validate: {
-      // tslint:disable-next-line:only-arrow-functions
-      validator(v) {
-        return !profanityFilter.isProfane(v);
-      },
-      // @ts-ignore
-      message: props => `No profanity allowed!`
-    }
-  }
+  content: { type: mongoose.Schema.Types.String }
 });
 
 // tslint:disable-next-line:only-arrow-functions

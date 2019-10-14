@@ -6,23 +6,20 @@ import {
   withAddSong,
   withGetSongs
 } from "../../server/generated/types";
-import ErrorMessage, { MySnackbarContentWrapper } from "./Notifications";
 
 interface IState {
   title: string;
-  error: boolean;
 }
 
 type IProps = AddSongProps & GetSongsProps & RouteComponentProps;
 
 class SongCreate extends React.Component<IProps, IState> {
   public state = {
-    title: "",
-    error: false
+    title: ""
   };
 
   public render() {
-    const { title, error } = this.state;
+    const { title } = this.state;
     return (
       <div>
         <h3>Create new song</h3>
@@ -33,7 +30,6 @@ class SongCreate extends React.Component<IProps, IState> {
             value={title}
           />
         </form>
-        {error && <ErrorMessage />}
       </div>
     );
   }
@@ -55,11 +51,6 @@ class SongCreate extends React.Component<IProps, IState> {
       })
       .then(() => {
         this.props.history.push("/");
-      })
-      .catch(error => {
-        this.setState({
-          error: true
-        });
       });
   };
 }
