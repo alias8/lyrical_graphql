@@ -2,9 +2,6 @@ import bodyParser from "body-parser";
 import express from "express";
 import expressGraphQL from "express-graphql";
 import mongoose from "mongoose";
-import webpack from "webpack";
-import webpackMiddleware from "webpack-dev-middleware";
-import { webpackConfig } from "../webpack.config";
 import schema from "./schema/schema";
 
 export const app = express();
@@ -30,8 +27,11 @@ app.use(
   })
 );
 
-app.use(
-  webpackMiddleware(webpack(webpackConfig), {
-    publicPath: webpackConfig.output!.publicPath as string
-  })
-);
+console.log(`----------------------- env is: ${process.env.NODE_ENV}`);
+if (process.env.NODE_ENV !== "production") {
+  import("./webpackDev").then(webpackDev => {
+    app.use(webpackDev.webpackDevMiddleware());
+  });
+} else {
+  app.use(express.static(__dirname + "/public"));
+}
