@@ -5,7 +5,6 @@ import path from "path";
 import webpack, { Stats } from "webpack";
 import nodeExternals from "webpack-node-externals";
 
-// del.sync(path.join("dist", "**", "*"));
 if (
   !["development", "test", "production"].some(
     env => process.env.NODE_ENV === env
@@ -16,7 +15,7 @@ if (
   );
 }
 
-const isDev = process.env.NODE_ENV === "dev";
+const isDev = process.env.NODE_ENV === "development";
 
 export const clientConfig: webpack.Configuration = {
   entry: "./client/index.tsx",
@@ -89,6 +88,9 @@ export const serverConfig: webpack.Configuration = {
     extensions: [".ts", ".tsx", ".js", ".jsx"]
   }
 };
+if (process.env.NODE_ENV === "production") {
+  del.sync(path.join("dist", "**", "*"));
+}
 
 webpack([serverConfig, clientConfig], (err: Error, stats: Stats) => {
   if (err) {
