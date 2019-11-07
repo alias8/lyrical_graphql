@@ -4,8 +4,8 @@ import { sampleSongs } from "./sample";
 
 export async function loadSampleData() {
   try {
-    await SongModel.deleteMany({ title: /.*/ });
-    await LyricsModel.deleteMany({ title: /.*/ });
+    await SongModel.deleteMany({});
+    await LyricsModel.deleteMany({});
     Promise.all(
       sampleSongs.map(song =>
         new SongModel({
