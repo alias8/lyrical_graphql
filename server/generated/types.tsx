@@ -14,6 +14,12 @@ export type Scalars = {
   Float: number;
 };
 
+export type CommentType = {
+  __typename?: "CommentType";
+  id?: Maybe<Scalars["ID"]>;
+  content?: Maybe<Scalars["String"]>;
+};
+
 export type LyricType = {
   __typename?: "LyricType";
   id?: Maybe<Scalars["ID"]>;
@@ -28,6 +34,7 @@ export type Mutation = {
   addLyricToSong?: Maybe<SongType>;
   likeLyric?: Maybe<LyricType>;
   deleteSong?: Maybe<SongType>;
+  addComment?: Maybe<CommentType>;
 };
 
 export type MutationAddSongArgs = {
@@ -47,11 +54,17 @@ export type MutationDeleteSongArgs = {
   id?: Maybe<Scalars["ID"]>;
 };
 
+export type MutationAddCommentArgs = {
+  content?: Maybe<Scalars["String"]>;
+};
+
 export type RootQueryType = {
   __typename?: "RootQueryType";
   songs?: Maybe<Array<Maybe<SongType>>>;
   song?: Maybe<SongType>;
   lyric?: Maybe<LyricType>;
+  comments?: Maybe<Array<Maybe<CommentType>>>;
+  comment?: Maybe<CommentType>;
 };
 
 export type RootQueryTypeSongArgs = {
@@ -62,11 +75,20 @@ export type RootQueryTypeLyricArgs = {
   id: Scalars["ID"];
 };
 
+export type RootQueryTypeCommentArgs = {
+  id: Scalars["ID"];
+};
+
 export type SongType = {
   __typename?: "SongType";
   id?: Maybe<Scalars["ID"]>;
   title?: Maybe<Scalars["String"]>;
   lyrics?: Maybe<Array<Maybe<LyricType>>>;
+};
+
+export type Subscription = {
+  __typename?: "Subscription";
+  commentAdded?: Maybe<CommentType>;
 };
 export type AddSongMutationVariables = {
   title?: Maybe<Scalars["String"]>;
@@ -142,6 +164,26 @@ export type GetSongQuery = { __typename?: "RootQueryType" } & {
           >
         >;
       }
+  >;
+};
+
+export type GetCommentsQueryVariables = {};
+
+export type GetCommentsQuery = { __typename?: "RootQueryType" } & {
+  comments: Maybe<
+    Array<
+      Maybe<
+        { __typename?: "CommentType" } & Pick<CommentType, "id" | "content">
+      >
+    >
+  >;
+};
+
+export type OnCommentAddedSubscriptionVariables = {};
+
+export type OnCommentAddedSubscription = { __typename?: "Subscription" } & {
+  commentAdded: Maybe<
+    { __typename?: "CommentType" } & Pick<CommentType, "id" | "content">
   >;
 };
 
@@ -427,6 +469,101 @@ export function withGetSong<TProps, TChildProps = {}>(
     GetSongProps<TChildProps>
   >(GetSongDocument, {
     alias: "withGetSong",
+    ...operationOptions
+  });
+}
+export const GetCommentsDocument = gql`
+  query getComments {
+    comments {
+      id
+      content
+    }
+  }
+`;
+export type GetCommentsComponentProps = Omit<
+  ReactApollo.QueryProps<GetCommentsQuery, GetCommentsQueryVariables>,
+  "query"
+>;
+
+export const GetCommentsComponent = (props: GetCommentsComponentProps) => (
+  <ReactApollo.Query<GetCommentsQuery, GetCommentsQueryVariables>
+    query={GetCommentsDocument}
+    {...props}
+  />
+);
+
+export type GetCommentsProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<GetCommentsQuery, GetCommentsQueryVariables>
+> &
+  TChildProps;
+export function withGetComments<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    GetCommentsQuery,
+    GetCommentsQueryVariables,
+    GetCommentsProps<TChildProps>
+  >
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    GetCommentsQuery,
+    GetCommentsQueryVariables,
+    GetCommentsProps<TChildProps>
+  >(GetCommentsDocument, {
+    alias: "withGetComments",
+    ...operationOptions
+  });
+}
+export const OnCommentAddedDocument = gql`
+  subscription onCommentAdded {
+    commentAdded {
+      id
+      content
+    }
+  }
+`;
+export type OnCommentAddedComponentProps = Omit<
+  ReactApollo.SubscriptionProps<
+    OnCommentAddedSubscription,
+    OnCommentAddedSubscriptionVariables
+  >,
+  "subscription"
+>;
+
+export const OnCommentAddedComponent = (
+  props: OnCommentAddedComponentProps
+) => (
+  <ReactApollo.Subscription<
+    OnCommentAddedSubscription,
+    OnCommentAddedSubscriptionVariables
+  >
+    subscription={OnCommentAddedDocument}
+    {...props}
+  />
+);
+
+export type OnCommentAddedProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<
+    OnCommentAddedSubscription,
+    OnCommentAddedSubscriptionVariables
+  >
+> &
+  TChildProps;
+export function withOnCommentAdded<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    OnCommentAddedSubscription,
+    OnCommentAddedSubscriptionVariables,
+    OnCommentAddedProps<TChildProps>
+  >
+) {
+  return ReactApollo.withSubscription<
+    TProps,
+    OnCommentAddedSubscription,
+    OnCommentAddedSubscriptionVariables,
+    OnCommentAddedProps<TChildProps>
+  >(OnCommentAddedDocument, {
+    alias: "withOnCommentAdded",
     ...operationOptions
   });
 }

@@ -8,7 +8,13 @@ import schema from "./schema/schema";
 export const app = express();
 
 // Replace with your mongoLab URI
-const MONGO_URI = "mongodb://james:james123@ds137827.mlab.com:37827/lyticaldb";
+let MONGO_URI;
+if (process.env.NODE_ENV !== "production") {
+  MONGO_URI = "mongodb://james:james123@ds141188.mlab.com:41188/lyricaldb-test"; // dev
+} else {
+  MONGO_URI = "mongodb://james:james123@ds137827.mlab.com:37827/lyticaldb"; // prod
+}
+
 if (!MONGO_URI) {
   throw new Error("You must provide a MongoLab URI");
 }
@@ -37,10 +43,10 @@ if (process.env.NODE_ENV !== "production") {
   app.use(express.static(__dirname + "/public"));
 }
 
-loadSampleData();
+// loadSampleData();
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;
-setInterval(() => {
-  // Reload sample data every 10 mins
-  loadSampleData();
-}, 10 * MINUTE);
+// setInterval(() => {
+//   // Reload sample data every 10 mins
+//   loadSampleData();
+// }, 10 * MINUTE);

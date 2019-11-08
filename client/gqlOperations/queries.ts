@@ -22,3 +22,12 @@ export const getSong = gql`
     }
   }
 `;
+
+export const getComments = gql`
+  query getComments {
+    comments {
+      id
+      content
+    }
+  }
+`;

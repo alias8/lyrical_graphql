@@ -1,4 +1,10 @@
-export const sampleSongs = [
+export interface ISampleSong {
+  title: string;
+  lyrics: string[];
+  comments: string[];
+}
+
+export const sampleSongs: ISampleSong[] = [
   {
     title: "See You Again",
     lyrics: [
@@ -7,7 +13,8 @@ export const sampleSongs = [
       "We've come a long way from where we began",
       "Oh I'll tell you all about it when I see you again",
       "When I see you again"
-    ]
+    ],
+    comments: ["comment see you again 1", "comment see you again 2"]
   },
   {
     title: "Lean On",
@@ -16,7 +23,8 @@ export const sampleSongs = [
       "We would walk on the sidewalk",
       "Innocent, remember?",
       "All we did was care for each other"
-    ]
+    ],
+    comments: ["lean on 1", "lean on 2"]
   },
   {
     title: "Thinking Out Loud",
@@ -25,7 +33,8 @@ export const sampleSongs = [
       "And I can't sweep you off of your feet",
       "Will your mouth still remember the taste of my love",
       "Will your eyes still smile from your cheeks"
-    ]
+    ],
+    comments: []
   },
   {
     title: "Heaven",
@@ -36,7 +45,8 @@ export const sampleSongs = [
       "Yeah, you come to raise me up",
       "When I'm beaten and broken up",
       "And now I'm back in the arms I love"
-    ]
+    ],
+    comments: []
   },
   {
     title: "Day 'N' Nite",
@@ -50,6 +60,7 @@ export const sampleSongs = [
       "Madness to magnet keeps attracting me, me (what, what)",
       "I try to run but see I'm not that fast (what, what)",
       "I think I'm first but surely finish last, last"
-    ]
+    ],
+    comments: []
   }
 ];

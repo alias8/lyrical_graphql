@@ -4,8 +4,10 @@ import {
   GraphQLNonNull,
   GraphQLObjectType
 } from "graphql";
+import { CommentModel } from "../models/comment";
 import { LyricsModel } from "../models/lyric";
 import { SongModel } from "../models/song";
+import { CommentType } from "./comment_type";
 import { LyricType } from "./lyric_type";
 import { SongType } from "./song_type";
 
@@ -32,6 +34,20 @@ export const RootQuery = new GraphQLObjectType({
       // @ts-ignore
       resolve(parentValue, { id }) {
         return LyricsModel.findById(id);
+      }
+    },
+    comments: {
+      type: new GraphQLList(CommentType),
+      resolve() {
+        return CommentModel.find({});
+      }
+    },
+    comment: {
+      type: CommentType,
+      args: { id: { type: new GraphQLNonNull(GraphQLID) } },
+      // @ts-ignore
+      resolve(parentValue, { id }) {
+        return CommentModel.findById(id);
       }
     }
   })

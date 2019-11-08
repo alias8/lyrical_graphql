@@ -1,36 +1,59 @@
 import React from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
-import { GetSongProps, withGetSong } from "../../server/generated/types";
+import {
+  GetCommentsComponent,
+  GetSongComponent
+} from "../../server/generated/types";
 import LyricCreate from "./LyricCreate";
 import LyricList from "./LyricList";
 
-type IProps = RouteComponentProps<{ id: string }> & GetSongProps;
+type IProps = RouteComponentProps<{ id: string }>;
 
-class SongDetail extends React.Component<IProps> {
+export class SongDetail extends React.Component<IProps> {
   public render() {
+    const { match } = this.props;
     return (
-      <div>
-        <Link to={"/"}>Back</Link>
-        {this.props.data && this.props.data.song ? (
-          <div>
-            <h3>{this.props.data.song.title}</h3>
-            {this.props.data.song.lyrics && (
-              <LyricList lyrics={this.props.data.song.lyrics} />
-            )}
-            <LyricCreate songId={this.props.match.params.id} />
-          </div>
-        ) : (
-          <div>Loading...</div>
-        )}
-      </div>
+      <>
+        <GetSongComponent skip={false} variables={{ id: match.params.id }}>
+          {({ data, error, loading }) => {
+            if (error || loading) {
+              return "...";
+            }
+            if (data && data.song) {
+              return (
+                <div>
+                  <Link to={"/"}>Back</Link>
+                  <h3>{data.song.title}</h3>
+                  {data.song.lyrics && <LyricList lyrics={data.song.lyrics} />}
+                  <LyricCreate songId={match.params.id} />
+                  <CommentsBox />
+                </div>
+              );
+            }
+          }}
+        </GetSongComponent>
+      </>
     );
   }
 }
 
-export default withGetSong<IProps>({
-  options: props => ({
-    variables: {
-      id: props.match.params.id
-    }
-  })
-})(SongDetail);
+const CommentsBox = () => {
+  return (
+    <GetCommentsComponent skip={false} variables={{}}>
+      {({ data, error, loading }) => {
+        if (error || loading) {
+          return "...";
+        }
+        if (data && data.comments) {
+          return (
+            <ul>
+              {data.comments.map(comment => {
+                return <li key={comment!.id!}>{comment!.content}</li>;
+              })}
+            </ul>
+          );
+        }
+      }}
+    </GetCommentsComponent>
+  );
+};
