@@ -43,7 +43,7 @@ if (process.env.NODE_ENV !== "production") {
   app.use(express.static(__dirname + "/public"));
 }
 
-// loadSampleData();
+loadSampleData();
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;
 // setInterval(() => {

@@ -1,67 +1,51 @@
 import React from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
 import {
-  DeleteSongProps,
-  GetSongsProps,
-  withDeleteSong,
-  withGetSongs
+  DeleteSongComponent,
+  GetSongsComponent
 } from "../../server/generated/types";
 
-interface IPropsItem {
-  id: string;
-  title: string;
-  onSongDelete: (id: string) => void;
-}
+type IProps = RouteComponentProps<{ id: string }>;
 
-const Item = ({ id, title, onSongDelete }: IPropsItem) => {
-  const onClick = () => {
-    onSongDelete(id);
-  };
-
+export const SongList = (props: IProps) => {
+  const { match } = props;
   return (
-    <li className={"collection-item"}>
-      <Link to={`/songs/${id}`}>{title}</Link>
-      <i className={"material-icons"} onClick={onClick}>
-        delete
-      </i>
-    </li>
+    <GetSongsComponent skip={false} variables={{ id: match.params.id }}>
+      {({ data, error, loading, refetch }) => {
+        if (error || loading) {
+          return "...";
+        }
+        if (data && data.songs) {
+          return (
+            <ul className={"collection"}>
+              {data.songs.map(song => {
+                return (
+                  <li key={song!.id!} className={"collection-item"}>
+                    <Link to={`/songs/${song!.id}`}>{song!.title}</Link>
+                    <DeleteSongComponent variables={{ id: song!.id! }}>
+                      {mutate => (
+                        <Item mutate={mutate} song={song} refetch={refetch} />
+                      )}
+                    </DeleteSongComponent>
+                  </li>
+                );
+              })}
+            </ul>
+          );
+        }
+      }}
+    </GetSongsComponent>
   );
 };
 
-type IProps = RouteComponentProps & GetSongsProps & DeleteSongProps;
-
-class SongList extends React.Component<IProps> {
-  public render() {
-    const { data } = this.props;
-    if (data!.loading) {
-      return <div>loading!</div>;
-    } else {
-      return (
-        <ul className={"collection"}>
-          {this.props.data!.songs!.map(song => {
-            return (
-              <Item
-                key={song!.id!}
-                id={song!.id!}
-                title={song!.title!}
-                onSongDelete={this.onSongDelete}
-              />
-            );
-          })}
-        </ul>
-      );
-    }
-  }
-
-  private onSongDelete = id => {
-    this.props.mutate!({ variables: { id } }).then(() => {
-      /*
-       * We can use refetch() here because we want to call the getSongs
-       * query again, and this component knows what that is.
-       * */
-      return this.props.data!.refetch();
-    });
+const Item = (mutate, song, refetch) => {
+  const onClick = () => {
+    mutate({ variables: { id: song!.id } }).then(() => refetch());
   };
-}
 
-export default withDeleteSong<IProps>()(withGetSongs<IProps>()(SongList));
+  return (
+    <i className={"material-icons"} onClick={onClick}>
+      delete
+    </i>
+  );
+};
