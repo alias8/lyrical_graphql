@@ -12,6 +12,7 @@ export const subscriptions = new GraphQLObjectType({
     commentAdded: {
       type: CommentType,
       subscribe: (parent, args, info) => {
+        console.log("----------------------james");
         return pubsubServer.asyncIterator(COMMENT_ADDED);
       }
     }

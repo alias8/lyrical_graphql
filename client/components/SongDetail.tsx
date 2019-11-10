@@ -46,8 +46,9 @@ export class SongDetail extends React.Component<IProps, IState> {
                       const a = 2; // todo: why isnt this working?
                     }}
                   >
-                    {({ data, loading, error }) => (
+                    {({ data: { onC }, loading, error }) => (
                       <h4>subscription should appear here: {!loading}</h4>
+                      // todo https://www.apollographql.com/docs/react/data/subscriptions/
                     )}
                   </OnCommentAddedComponent>
                   <AddCommentComponent>
