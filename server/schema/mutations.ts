@@ -55,7 +55,7 @@ export const mutations = new GraphQLObjectType({
       },
       // @ts-ignore
       resolve(parentValue, { content }) {
-        return new CommentModel(content).save();
+        return new CommentModel({ content }).save();
       }
     }
   }

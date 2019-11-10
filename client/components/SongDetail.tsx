@@ -1,23 +1,36 @@
 import React from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
 import {
+  AddCommentComponent,
+  AddSongComponent,
+  CommentType,
   GetCommentsComponent,
   GetSongComponent,
   OnCommentAddedComponent
 } from "../../server/generated/types";
+import { COMMENT_ADDED, pubsubClient } from "../index";
 import { LyricCreate } from "./LyricCreate";
 import { LyricList } from "./LyricList";
 
 type IProps = RouteComponentProps<{ id: string }>;
 
+interface IState {
+  comment: string;
+}
+
 // tslint:disable:no-shadowed-variable
-export class SongDetail extends React.Component<IProps> {
+export class SongDetail extends React.Component<IProps, IState> {
+  public state = {
+    comment: ""
+  };
+
   public render() {
     const { match } = this.props;
+    const { comment } = this.state;
     return (
       <>
         <GetSongComponent skip={false} variables={{ id: match.params.id }}>
-          {({ data, error, loading }) => {
+          {({ data, error, loading, subscribeToMore }) => {
             if (error || loading) {
               return "...";
             }
@@ -30,13 +43,46 @@ export class SongDetail extends React.Component<IProps> {
                   <LyricCreate songId={match.params.id} />
                   <OnCommentAddedComponent
                     onSubscriptionData={options => {
-                      const a = 2;
+                      const a = 2; // todo: why isnt this working?
                     }}
                   >
                     {({ data, loading, error }) => (
-                      <h4>New comment: {!loading}</h4>
+                      <h4>subscription should appear here: {!loading}</h4>
                     )}
                   </OnCommentAddedComponent>
+                  <AddCommentComponent>
+                    {mutate => (
+                      <>
+                        <h3>Add comment:</h3>
+                        <form
+                          onSubmit={event => {
+                            event.preventDefault();
+                            mutate!({
+                              variables: {
+                                content: comment
+                              }
+                            }).then((result: any) => {
+                              this.setState({ comment: "" });
+                              const returnedComment = result.data.addComment;
+                              pubsubClient.publish(COMMENT_ADDED, {
+                                commentAdded: {
+                                  id: returnedComment.id,
+                                  content: returnedComment.id
+                                }
+                              });
+                            });
+                          }}
+                        >
+                          <input
+                            onChange={event =>
+                              this.setState({ comment: event.target.value })
+                            }
+                            value={comment}
+                          />
+                        </form>
+                      </>
+                    )}
+                  </AddCommentComponent>
                   <CommentsBox />
                 </div>
               );

@@ -1,16 +1,19 @@
 import { GraphQLID, GraphQLObjectType, GraphQLString } from "graphql";
-import { CommentModel } from "../models/comment";
-import { LyricsModel } from "../models/lyric";
-import { SongModel } from "../models/song";
+import { PubSub } from "graphql-subscriptions";
 import { CommentType } from "./comment_type";
-import { LyricType } from "./lyric_type";
-import { SongType } from "./song_type";
+
+export const COMMENT_ADDED = "commentAdded";
+
+export const pubsubServer = new PubSub();
 
 export const subscriptions = new GraphQLObjectType({
   name: "Subscription",
-  fields: {
+  fields: () => ({
     commentAdded: {
-      type: CommentType
+      type: CommentType,
+      subscribe: (parent, args, info) => {
+        return pubsubServer.asyncIterator(COMMENT_ADDED);
+      }
     }
-  }
+  })
 });

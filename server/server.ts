@@ -1,4 +1,3 @@
-import { graphiqlExpress, graphqlExpress } from "apollo-server-express";
 import bodyParser from "body-parser";
 import express from "express";
 import expressGraphQL from "express-graphql";
@@ -8,8 +7,8 @@ import { loadSampleData } from "./data/loadSampleData";
 import { CommentModel } from "./models/comment";
 import schema from "./schema/schema";
 
+export const port = process.env.PORT || 4000;
 export const app = express();
-export const pubsub = new PubSub();
 
 // Replace with your mongoLab URI
 let MONGO_URI;
@@ -48,19 +47,9 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 loadSampleData();
-const SECOND = 1000;
-const MINUTE = 60 * SECOND;
-setInterval(() => {
-  // Reload sample data every 10 mins
-  loadSampleData();
-}, 10 * MINUTE);
-
-setInterval(() => {
-  // Reload sample data every 10 mins
-  const content = `comment ${new Date()}`;
-  new CommentModel({
-    // todo: associate with song later
-    content
-  }).save();
-  pubsub.publish("commentAdded", content);
-}, 20 * SECOND);
+export const SECOND = 1000;
+export const MINUTE = 60 * SECOND;
+// setInterval(() => {
+//   // Reload sample data every 10 mins
+//   loadSampleData();
+// }, 10 * MINUTE);

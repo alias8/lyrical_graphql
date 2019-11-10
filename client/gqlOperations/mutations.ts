@@ -38,3 +38,12 @@ export const likeLyricMutation = gql`
     }
   }
 `;
+
+export const addCommentMutation = gql`
+  mutation AddComment($content: String) {
+    addComment(content: $content) {
+      id
+      content
+    }
+  }
+`;

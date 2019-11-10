@@ -138,6 +138,16 @@ export type LikeLyricMutation = { __typename?: "Mutation" } & {
   >;
 };
 
+export type AddCommentMutationVariables = {
+  content?: Maybe<Scalars["String"]>;
+};
+
+export type AddCommentMutation = { __typename?: "Mutation" } & {
+  addComment: Maybe<
+    { __typename?: "CommentType" } & Pick<CommentType, "id" | "content">
+  >;
+};
+
 export type GetSongsQueryVariables = {};
 
 export type GetSongsQuery = { __typename?: "RootQueryType" } & {
@@ -379,6 +389,52 @@ export function withLikeLyric<TProps, TChildProps = {}>(
     LikeLyricProps<TChildProps>
   >(LikeLyricDocument, {
     alias: "withLikeLyric",
+    ...operationOptions
+  });
+}
+export const AddCommentDocument = gql`
+  mutation AddComment($content: String) {
+    addComment(content: $content) {
+      id
+      content
+    }
+  }
+`;
+export type AddCommentMutationFn = ReactApollo.MutationFn<
+  AddCommentMutation,
+  AddCommentMutationVariables
+>;
+export type AddCommentComponentProps = Omit<
+  ReactApollo.MutationProps<AddCommentMutation, AddCommentMutationVariables>,
+  "mutation"
+>;
+
+export const AddCommentComponent = (props: AddCommentComponentProps) => (
+  <ReactApollo.Mutation<AddCommentMutation, AddCommentMutationVariables>
+    mutation={AddCommentDocument}
+    {...props}
+  />
+);
+
+export type AddCommentProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<AddCommentMutation, AddCommentMutationVariables>
+> &
+  TChildProps;
+export function withAddComment<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    AddCommentMutation,
+    AddCommentMutationVariables,
+    AddCommentProps<TChildProps>
+  >
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    AddCommentMutation,
+    AddCommentMutationVariables,
+    AddCommentProps<TChildProps>
+  >(AddCommentDocument, {
+    alias: "withAddComment",
     ...operationOptions
   });
 }
