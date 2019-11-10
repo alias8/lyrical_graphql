@@ -16,7 +16,7 @@ import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
 import Default from "./components/Default";
 import NoMatch from "./components/NoMatch";
-import SongCreate from "./components/SongCreate";
+import { SongCreate } from "./components/SongCreate";
 import { SongDetail } from "./components/SongDetail";
 import { SongList } from "./components/SongList";
 import "./style/style.css";

@@ -2,13 +2,15 @@ import React from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
 import {
   GetCommentsComponent,
-  GetSongComponent
+  GetSongComponent,
+  OnCommentAddedComponent
 } from "../../server/generated/types";
-import LyricCreate from "./LyricCreate";
-import LyricList from "./LyricList";
+import { LyricCreate } from "./LyricCreate";
+import { LyricList } from "./LyricList";
 
 type IProps = RouteComponentProps<{ id: string }>;
 
+// tslint:disable:no-shadowed-variable
 export class SongDetail extends React.Component<IProps> {
   public render() {
     const { match } = this.props;
@@ -26,6 +28,15 @@ export class SongDetail extends React.Component<IProps> {
                   <h3>{data.song.title}</h3>
                   {data.song.lyrics && <LyricList lyrics={data.song.lyrics} />}
                   <LyricCreate songId={match.params.id} />
+                  <OnCommentAddedComponent
+                    onSubscriptionData={options => {
+                      const a = 2;
+                    }}
+                  >
+                    {({ data, loading, error }) => (
+                      <h4>New comment: {!loading}</h4>
+                    )}
+                  </OnCommentAddedComponent>
                   <CommentsBox />
                 </div>
               );

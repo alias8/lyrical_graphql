@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  AddLyricToSongComponent,
   AddLyricToSongProps,
   withAddLyricToSong
 } from "../../server/generated/types";
@@ -12,35 +13,42 @@ interface IOwnProps {
   songId: string;
 }
 
-type IProps = IOwnProps & AddLyricToSongProps;
+type IProps = IOwnProps;
 
-class LyricCreate extends React.Component<IProps, IState> {
+export class LyricCreate extends React.Component<IProps, IState> {
   public state = {
     content: ""
   };
 
-  public render() {
-    return (
-      <form onSubmit={this.onSubmit}>
-        <label>Add a lyric</label>
-        <input value={this.state.content} onChange={this.onChange} />
-      </form>
-    );
-  }
-
-  private onChange = event => {
+  public onChange = event => {
     this.setState({ content: event.target.value });
   };
 
-  private onSubmit = event => {
-    event.preventDefault();
-    this.props.mutate!({
-      variables: {
-        content: this.state.content,
-        songId: this.props.songId
-      }
-    }).then(() => this.setState({ content: "" }));
-  };
+  public render() {
+    return (
+      <AddLyricToSongComponent
+        variables={{
+          content: this.state.content,
+          songId: this.props.songId
+        }}
+      >
+        {mutate => (
+          <form
+            onSubmit={event => {
+              event.preventDefault();
+              mutate!({
+                variables: {
+                  content: this.state.content,
+                  songId: this.props.songId
+                }
+              }).then(() => this.setState({ content: "" }));
+            }}
+          >
+            <label>Add a lyric</label>
+            <input value={this.state.content} onChange={this.onChange} />
+          </form>
+        )}
+      </AddLyricToSongComponent>
+    );
+  }
 }
-
-export default withAddLyricToSong<IProps>()(LyricCreate);

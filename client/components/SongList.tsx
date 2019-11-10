@@ -10,7 +10,7 @@ type IProps = RouteComponentProps<{ id: string }>;
 export const SongList = (props: IProps) => {
   const { match } = props;
   return (
-    <GetSongsComponent skip={false} variables={{ id: match.params.id }}>
+    <GetSongsComponent skip={false}>
       {({ data, error, loading, refetch }) => {
         if (error || loading) {
           return "...";
@@ -38,7 +38,7 @@ export const SongList = (props: IProps) => {
   );
 };
 
-const Item = (mutate, song, refetch) => {
+const Item = ({ mutate, song, refetch }) => {
   const onClick = () => {
     mutate({ variables: { id: song!.id } }).then(() => refetch());
   };

@@ -1,13 +1,13 @@
 import React from "react";
 import {
+  LikeLyricComponent,
   LikeLyricProps,
-  LyricType,
-  withLikeLyric
+  LyricType
 } from "../../server/generated/types";
 
-const Like = ({ id, onLike, likes }) => {
+const Like = ({ id, onLike, likes, mutate }) => {
   const like = () => {
-    onLike(id, likes);
+    onLike(id, likes, mutate);
   };
   return (
     <i className={"material-icons"} onClick={like}>
@@ -20,9 +20,9 @@ interface IOwnProps {
   lyrics: Array<LyricType | null>;
 }
 
-type IProps = IOwnProps & LikeLyricProps;
+type IProps = IOwnProps;
 
-class LyricList extends React.Component<IProps> {
+export class LyricList extends React.Component<IProps> {
   public render() {
     return (
       <ul className={"collection"}>
@@ -31,12 +31,30 @@ class LyricList extends React.Component<IProps> {
             <li key={lyric!.id!} className={"collection-item"}>
               {lyric!.content}
               <div className="vote-box">
-                <Like
-                  id={lyric!.id}
-                  likes={lyric!.likes}
-                  onLike={this.onLike}
-                />
-                {lyric!.likes}
+                <LikeLyricComponent
+                  optimisticResponse={{
+                    __typename: "Mutation",
+                    likeLyric: {
+                      id: lyric!.id,
+                      __typename: "LyricType",
+                      likes: lyric!.likes! + 1
+                    }
+                  }}
+                >
+                  {mutate => {
+                    return (
+                      <>
+                        <Like
+                          id={lyric!.id}
+                          likes={lyric!.likes}
+                          mutate={mutate}
+                          onLike={this.onLike}
+                        />
+                        {lyric!.likes}
+                      </>
+                    );
+                  }}
+                </LikeLyricComponent>
               </div>
             </li>
           );
@@ -45,19 +63,7 @@ class LyricList extends React.Component<IProps> {
     );
   }
 
-  private onLike = (id: string, likes: number) => {
-    this.props.mutate!({
-      variables: { id },
-      optimisticResponse: {
-        __typename: "Mutation",
-        likeLyric: {
-          id,
-          __typename: "LyricType",
-          likes: likes + 1
-        }
-      }
-    });
+  private onLike = (id: string, likes: number, mutate) => {
+    mutate!({ variables: { id } });
   };
 }
-
-export default withLikeLyric<IProps>()(LyricList);
