@@ -1,14 +1,12 @@
+import gql from "graphql-tag";
 import React from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
 import {
   AddCommentComponent,
-  AddSongComponent,
-  CommentType,
   GetCommentsComponent,
   GetSongComponent,
   OnCommentAddedComponent
 } from "../../server/generated/types";
-import { COMMENT_ADDED, pubsubClient } from "../index";
 import { LyricCreate } from "./LyricCreate";
 import { LyricList } from "./LyricList";
 
@@ -46,7 +44,7 @@ export class SongDetail extends React.Component<IProps, IState> {
                       const a = 2; // todo: why isnt this working?
                     }}
                   >
-                    {({ data: { onC }, loading, error }) => (
+                    {({ data, loading, error }) => (
                       <h4>subscription should appear here: {!loading}</h4>
                       // todo https://www.apollographql.com/docs/react/data/subscriptions/
                     )}
@@ -64,13 +62,6 @@ export class SongDetail extends React.Component<IProps, IState> {
                               }
                             }).then((result: any) => {
                               this.setState({ comment: "" });
-                              const returnedComment = result.data.addComment;
-                              pubsubClient.publish(COMMENT_ADDED, {
-                                commentAdded: {
-                                  id: returnedComment.id,
-                                  content: returnedComment.id
-                                }
-                              });
                             });
                           }}
                         >
@@ -84,7 +75,24 @@ export class SongDetail extends React.Component<IProps, IState> {
                       </>
                     )}
                   </AddCommentComponent>
-                  <CommentsBox />
+                  <GetCommentsComponent skip={false} variables={{}}>
+                    {({ data, error, loading }) => {
+                      if (error || loading) {
+                        return "...";
+                      }
+                      if (data && data.comments) {
+                        return (
+                          <ul>
+                            {data.comments.map(comment => {
+                              return (
+                                <li key={comment!.id!}>{comment!.content}</li>
+                              );
+                            })}
+                          </ul>
+                        );
+                      }
+                    }}
+                  </GetCommentsComponent>
                 </div>
               );
             }
@@ -94,24 +102,3 @@ export class SongDetail extends React.Component<IProps, IState> {
     );
   }
 }
-
-const CommentsBox = () => {
-  return (
-    <GetCommentsComponent skip={false} variables={{}}>
-      {({ data, error, loading }) => {
-        if (error || loading) {
-          return "...";
-        }
-        if (data && data.comments) {
-          return (
-            <ul>
-              {data.comments.map(comment => {
-                return <li key={comment!.id!}>{comment!.content}</li>;
-              })}
-            </ul>
-          );
-        }
-      }}
-    </GetCommentsComponent>
-  );
-};

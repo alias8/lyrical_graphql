@@ -29,7 +29,6 @@ const cache = new InMemoryCache({
 
 const httpLink = new HttpLink();
 
-export const pubsubClient = new PubSub();
 const wsLink = new WebSocketLink({
   uri: `ws://localhost:${port}/`,
   options: {

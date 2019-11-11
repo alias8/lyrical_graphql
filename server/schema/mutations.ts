@@ -5,6 +5,7 @@ import { SongModel } from "../models/song";
 import { CommentType } from "./comment_type";
 import { LyricType } from "./lyric_type";
 import { SongType } from "./song_type";
+import { COMMENT_ADDED, pubsubServer } from "./subscriptions";
 
 export const mutations = new GraphQLObjectType({
   name: "Mutation",
@@ -53,9 +54,15 @@ export const mutations = new GraphQLObjectType({
         content: { type: GraphQLString }
         // songId: { type: GraphQLID } // james add later
       },
-      // @ts-ignore
-      resolve(parentValue, { content }) {
-        return new CommentModel({ content }).save();
+      async resolve(parentValue, { content }) {
+        const comment = await new CommentModel({ content }).save();
+        pubsubServer.publish(COMMENT_ADDED, {
+          commentAdded: {
+            id: comment.id,
+            content: comment.id
+          }
+        });
+        return comment;
       }
     }
   }
