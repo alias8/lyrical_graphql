@@ -39,60 +39,59 @@ export class SongDetail extends React.Component<IProps, IState> {
                   <h3>{data.song.title}</h3>
                   {data.song.lyrics && <LyricList lyrics={data.song.lyrics} />}
                   <LyricCreate songId={match.params.id} />
+                  {/* subscription should appear here: */}
+                  {/*todo https://www.apollographql.com/docs/react/data/subscriptions/*/}
                   <OnCommentAddedComponent
                     onSubscriptionData={options => {
                       const a = 2; // todo: why isnt this working?
                     }}
                   >
-                    {({ data, loading, error }) => (
-                      <h4>subscription should appear here: {!loading}</h4>
-                      // todo https://www.apollographql.com/docs/react/data/subscriptions/
-                    )}
+                    {({ data, loading, error }) => null}
                   </OnCommentAddedComponent>
-                  <AddCommentComponent>
-                    {mutate => (
-                      <>
-                        <h3>Add comment:</h3>
-                        <form
-                          onSubmit={event => {
-                            event.preventDefault();
-                            mutate!({
-                              variables: {
-                                content: comment
-                              }
-                            }).then((result: any) => {
-                              this.setState({ comment: "" });
-                            });
-                          }}
-                        >
-                          <input
-                            onChange={event =>
-                              this.setState({ comment: event.target.value })
-                            }
-                            value={comment}
-                          />
-                        </form>
-                      </>
-                    )}
-                  </AddCommentComponent>
-                  <GetCommentsComponent skip={false} variables={{}}>
-                    {({ data, error, loading }) => {
-                      if (error || loading) {
-                        return "...";
-                      }
-                      if (data && data.comments) {
-                        return (
-                          <ul>
-                            {data.comments.map(comment => {
-                              return (
-                                <li key={comment!.id!}>{comment!.content}</li>
-                              );
-                            })}
-                          </ul>
-                        );
-                      }
-                    }}
-                  </GetCommentsComponent>
+                  {/*<AddCommentComponent>*/}
+                  {/*  {mutate => (*/}
+                  {/*    <>*/}
+                  {/*      <h3>Add comment:</h3>*/}
+                  {/*      <form*/}
+                  {/*        onSubmit={event => {*/}
+                  {/*          event.preventDefault();*/}
+                  {/*          mutate!({*/}
+                  {/*            variables: {*/}
+                  {/*              content: comment*/}
+                  {/*            }*/}
+                  {/*          }).then((result: any) => {*/}
+                  {/*            this.setState({ comment: "" });*/}
+                  {/*          });*/}
+                  {/*        }}*/}
+                  {/*      >*/}
+                  {/*        <input*/}
+                  {/*          onChange={event =>*/}
+                  {/*            this.setState({ comment: event.target.value })*/}
+                  {/*          }*/}
+                  {/*          value={comment}*/}
+                  {/*        />*/}
+                  {/*      </form>*/}
+                  {/*    </>*/}
+                  {/*  )}*/}
+                  {/*</AddCommentComponent>*/}
+                  {/*<GetCommentsComponent skip={false} variables={{}}>*/}
+                  {/*  {({ data, error, loading }) => {*/}
+                  {/*    if (error || loading) {*/}
+                  {/*      return "...";*/}
+                  {/*    }*/}
+                  {/*    if (data && data.comments) {*/}
+                  {/*      return (*/}
+                  {/*        <ul>*/}
+                  {/*          {data.comments.map(comment => {*/}
+                  {/*            return (*/}
+                  {/*              <li key={comment!.id!}>{comment!.content}</li>*/}
+                  {/*            );*/}
+                  {/*          })}*/}
+                  {/*        </ul>*/}
+                  {/*      );*/}
+                  {/*    }*/}
+                  {/*  }}*/}
+                  {/*</GetCommentsComponent>*/}
                 </div>
               );
             }
